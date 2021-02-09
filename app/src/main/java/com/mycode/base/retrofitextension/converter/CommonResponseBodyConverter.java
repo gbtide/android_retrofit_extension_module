@@ -73,10 +73,8 @@ class CommonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
         } else {
             Gson gson = GsonInstance.get();
             BaseJsonObject<T> jsonBody = null;
-            String responseString = "";
 
             try {
-                responseString = value.toString();
                 JsonReader jsonReader = gson.newJsonReader(value.charStream());
                 jsonBody = gson.fromJson(jsonReader, TypeUtils.parameterize(BaseJsonObject.class, type));
             } catch (Exception e) {
@@ -85,7 +83,7 @@ class CommonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 
             // 1) 예상하지 못한 포멧
             if (jsonBody == null) {
-                throw new ResponseParsingException.Builder(responseString,
+                throw new ResponseParsingException.Builder("unexpected response type (json)",
                         ResponseParsingException.Type.INVALID_RESPONSE_BODY)
                         .build();
             }
