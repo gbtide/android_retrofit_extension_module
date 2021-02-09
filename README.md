@@ -15,7 +15,15 @@ Call, CallAdpater, ResponseConverter를 모듈 내에서 재정의하고 있습�
 - Custom Annotation 지원 : @Retry, @Preload, @ResponseType 등
 - xml, json 동시 파싱 지원
 - interface에서 path 정의 시, BaseResponse(서비스마다 code, message, result를 담고 있는 공통 래핑 클래스)를 넣지 않고 바로 POJO 데이터를 넣을 수 있습니다.
-
+<pre><code>
+{
+  "code" : 200,
+  "message" : "success",
+  "result" : {
+     // pojo 영역이 될 수 있습니다.  
+  }
+}
+</code></pre> 
 
 - api call에 대한 Error 처리를 확장할 수 있습니다.
 - 기존 모듈보다 확장된 RX Response(Completable, Single, Maybe, Flowable 등)를 지원합니다.
@@ -26,3 +34,8 @@ Call, CallAdpater, ResponseConverter를 모듈 내에서 재정의하고 있습�
 - 파일 Response가 먼저 도착하면 화면에 즉시 Response 내용을 보여준다.
 - 네트워크 Response가 먼저 도착하면 즉시 보여주되, 최신데이터를 파일에 저장한다. 그리고 이후 파일 Reponse는 도착하더라도 보여주지 않는다.
 - 단, Response가 파일로 먼저 도착하더라도 네트워크로 Error가 떨어질 수 있는 상황이기 때문에, Error 상황 시 적절하게 잘 대응해야한다. (Error View  보다는 SnackBar가 적절하다.)
+<pre><code>
+@Preload
+@GET("/cafemobileapps/cafe-home-app/v1/home")
+Observable<CafeHomeResponseV2> getCafeHomeData(@Query("myCafeCount") int myCafeCount, @Query("articleCount") int articleCount);
+</code></pre> 
