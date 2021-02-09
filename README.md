@@ -11,23 +11,29 @@ Call, CallAdpater, ResponseConverter를 모듈 내에서 재정의하고 있습�
 - RECallAdpater : RECall을 생성합니다. 이 때 서비스에서 정의한 Custom Annotation 을 파싱하여 옵션으로 넣을 수 있습니다. RX 처리를 위해 RECall을 Wrapping 하는 CallObservable도 생성하기 때문에, rx로 API 요청 시 subscribing 중간에 개발자가 직접 개입할 수 있습니다.
 - REResponseConverter : Http 클라이언트 모듈에서 던진 Response를 서비스에 맞게 파싱합니다. 완성된 Response를 최종 요청지에 내려주거나, 게이트웨이 에러, 서비스 에러, 파싱 에러 등을 처리하여 오류 처리 모듈로 전송하는 역할을 합니다. 
 
+
 ### 즉, 아래 기능을 지원합니다.
 - Custom Annotation 지원 : @Retry, @Preload, @ResponseType 등
 - xml, json 동시 파싱 지원
-- interface에서 path 정의 시, BaseResponse(서비스마다 code, message, result를 담고 있는 공통 래핑 클래스)를 넣지 않고 바로 POJO 데이터를 넣을 수 있습니다.
+- Api path 정의 시, BaseResponse(서비스마다 code, message, result를 담고 있는 공통 래핑 클래스)를 넣지 않고 바로 POJO 데이터를 넣을 수 있습니다.
 <pre><code>
 {
-  "code" : 200,
-  "message" : "success",
-  "result" : {
-     // pojo 영역이 될 수 있습니다.  
+  "code" : 200, // BaseResponse 영역
+  "message" : "success", BaseResponse 영역
+  "result" : // BaseResponse 영역
+  {
+     // pojo 영역. 본 영역의 자바 object를 path response에 넣으면 됩니다.
   }
 }
+
+// 예시입니다.
+@GET("/apps/home-app/v1/home")
+POJOobject getHome(@Query("userId") int userId);
 </code></pre> 
 
-- api call에 대한 Error 처리를 확장할 수 있습니다.
-- 기존 모듈보다 확장된 RX Response(Completable, Single, Maybe, Flowable 등)를 지원합니다.
-- Preload 를 지원합니다.
+- api 호출 결과로, 서비스에서 정의한 Exception을 내려줄 수 있습니다. (공통 오류들은 모듈 내에서 처리)
+- RX Response(Completable, Single, Maybe, Flowable 등)를 지원합니다.
+
 
 ### Preload 란?
 - 파일 로딩과 네트워크 로딩을 동시에 요청한다.
