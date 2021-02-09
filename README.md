@@ -28,7 +28,7 @@ Call, CallAdpater, ResponseConverter를 모듈 내에서 재정의하고 있습�
 
 // 예시입니다.
 @GET("/apps/home-app/v1/home")
-POJOobject getHome(@Query("userId") int userId);
+POJOResponse getHome(@Query("userId") int userId);
 </code></pre> 
 
 - api 호출 결과로, 서비스에서 정의한 Exception을 내려줄 수 있습니다. (공통 오류들은 모듈 내에서 처리)
@@ -42,6 +42,6 @@ POJOobject getHome(@Query("userId") int userId);
 - 단, Response가 파일로 먼저 도착하더라도 네트워크로 Error가 떨어질 수 있는 상황이기 때문에, Error 상황 시 적절하게 잘 대응해야한다. (Error View  보다는 SnackBar가 적절하다.)
 <pre><code>
 @Preload
-@GET("/cafemobileapps/cafe-home-app/v1/home")
-Observable<CafeHomeResponseV2> getCafeHomeData(@Query("myCafeCount") int myCafeCount, @Query("articleCount") int articleCount);
+@GET("/apps/home-app/v1/home")
+Observable<HomeResponse> getHome(@Query("userId") int userId);
 </code></pre> 
